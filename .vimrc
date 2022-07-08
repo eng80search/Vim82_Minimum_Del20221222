@@ -218,8 +218,14 @@ endfunction
 
 " commentary Setting
 autocmd FileType vb setlocal commentstring='\ %s
+autocmd FileType sql setlocal commentstring=--\ %s
 autocmd FileType asp setlocal commentstring=<%--\ %s\ --%>
 autocmd FileType aspvbs setlocal commentstring=<%--\ %s\ --%>
+autocmd FileType dosbatch setlocal commentstring=rem\ %s
+
+" visual studio msbuild Setting
+autocmd BufNewFile,BufRead *.vbproj,*.xaml setf xml
+autocmd BufNewFile,BufRead *.vbproj,*.vb,*.cs compiler msbuild
 
 " highlightは最後に置く
 highlight CursorLine ctermbg=235
