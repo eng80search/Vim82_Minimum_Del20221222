@@ -2,7 +2,6 @@ set number
 set runtimepath+=$HOME/vimfiles
 set runtimepath+=$HOME/vimfiles/after
 set nocompatible
-QuickfixCmdPost make,grep,grepadd,vimgrep copen
 
 " 日本語版のhelpを優先
 " set helplang=ja,en
@@ -10,6 +9,14 @@ set helplang=ja
 
 " 検索設定
 nnoremap / /\v
+
+" argdoのための設定
+set hidden
+
+" 自動保存を有効化(makeもしくは!外部コマンドを実行する際に、
+" 変更がると自動的に保存してからこれらのプログラムを実行する)
+set autowrite
+set autoread
 
 " タブ設定
 noremap <Tab> gt<CR>
@@ -216,16 +223,31 @@ function! MakeTabLine()
 	return tabpages . '%=' . info " タブリストを左に、情報を右に表示
 endfunction
 
-" commentary Setting
-autocmd FileType vb setlocal commentstring='\ %s
-autocmd FileType sql setlocal commentstring=--\ %s
-autocmd FileType asp setlocal commentstring=<%--\ %s\ --%>
-autocmd FileType aspvbs setlocal commentstring=<%--\ %s\ --%>
-autocmd FileType dosbatch setlocal commentstring=rem\ %s
+augroup sessionStart
+	autocmd!
+	autocmd SessionLoadPost * so ~/.vimrc
+augroup END
 
-" visual studio msbuild Setting
-autocmd BufNewFile,BufRead *.vbproj,*.xaml setf xml
-autocmd BufNewFile,BufRead *.vbproj,*.vb,*.cs compiler msbuild
+augroup quickfixOpen
+	autocmd!
+	autocmd QuickfixCmdPost grep,grepadd,vimgrep copen
+augroup END
+
+augroup comment
+	autocmd!
+	" commentary Setting
+	autocmd FileType vb setlocal commentstring='\ %s
+	autocmd FileType sql setlocal commentstring=--\ %s
+	autocmd FileType asp setlocal commentstring=<%--\ %s\ --%>
+	autocmd FileType aspvbs setlocal commentstring=<%--\ %s\ --%>
+	autocmd FileType dosbatch setlocal commentstring=rem\ %s
+augroup END
+
+augroup msbuild
+	" visual studio msbuild Setting
+	autocmd BufNewFile,BufRead *.vbproj,*.xaml setf xml
+	autocmd BufNewFile,BufRead *.vbproj,*.vb,*.cs compiler msbuild
+augroup END
 
 " highlightは最後に置く
 highlight CursorLine ctermbg=235
