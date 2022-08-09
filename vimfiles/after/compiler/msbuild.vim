@@ -10,6 +10,6 @@ CompilerSet errorformat=
   
 " Default make
 CompilerSet makeprg=MSBuild.exe\
-            \ -t:build\
+            \ -t:Clearn,Build\
             \ -p:configuration=debug\
             \ -p:Plateform=\"x64\"\
