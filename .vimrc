@@ -9,6 +9,8 @@ set helplang=ja
 
 " 検索設定
 nnoremap / /\v
+" 入力と同時に検索を行う機能を有効にする
+set incsearch
 
 " argdoのための設定
 set hidden
@@ -182,9 +184,6 @@ function! s:tabpage_label(n)
 	if title !=# ''
 		return title
 	endif
-	
-	" タブページ内のバッファリスト
-	let bufnrs = tabpagebuflist(a:n)
 	
 	" タブページ内のバッファリスト
 	let bufnrs = tabpagebuflist(a:n)
