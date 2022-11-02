@@ -287,6 +287,15 @@ let g:vim_current_word#highlight_delay = 500
 hi CurrentWord ctermbg=53
 hi CurrentWordTwins ctermbg=245
 
+" AutoSave plugin Setting
+" disable AutoSave on Vim startup
+let g:auto_save = 0
+" do not save while in insert mode
+let g:auto_save_in_insert_mode = 0
+" do not display auto-save time
+" let g:auto_save_silent = 1
+
+
 " 後書き
 " このスクリプトはGitの付属されているVimに対してのカスタマイズ用の設定である。
 " 開発環境は外のネットワークに接続できなくて、vimはこれしかない絶望の環境でも
