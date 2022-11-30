@@ -325,3 +325,60 @@ let g:auto_save_in_insert_mode = 0
 " Shift-JISに変更
 " $chcp 932
 
+" netrwを開いたり閉じたりする関数 
+function! NetrwToggle()
+
+    " 現在のタブ及びWindowを退避する
+    let l:current_win_id = win_getid()
+    let l:current_tabnr = tabpagenr()
+
+    " 現在のwindowがnetrwの場合は、閉じて終了する
+    if &filetype == "netrw"
+        execute "clo"
+        return 0
+    endif
+
+    " 全windowを対象に処理を実施
+    for item in getwininfo()
+
+        let l:tabnr = item.tabnr
+
+        " 現在のタブでのみ処理を実行
+        if l:tabnr == l:current_tabnr
+
+            " echo "winid is " . item.winid . " bufname is " . bufname(item.bufnr)
+            call win_gotoid(item.winid)
+
+            let l:filetype = &filetype
+            " echo "filetype is " . l:filetype
+
+            " windowがnetrwのwindowかを判断
+            if l:filetype == "netrw" 
+                " netrwを閉じる
+                execute "clo"
+                call win_gotoid(l:current_win_id)
+                " gitで使用する場合、何回か本関数が実行されると、
+                " ファイルが保存できない場合は以下の設定を追加する
+                " set buftype=
+
+                return 0
+            endif
+
+        endif
+
+    endfor
+
+    " 退避したwindowに戻る
+    call win_gotoid(l:current_win_id)
+    " 全体幅の20%幅でnetrwを開く
+    execute "Vexplore 20"
+    call win_gotoid(l:current_win_id)
+    " gitで使用する場合、何回か本関数が実行されると、
+    " ファイルが保存できない場合は以下の設定を追加する
+    " set buftype=
+
+endfunction
+
+" 関数呼び出しための設定
+command! NetrwToggleCmd call NetrwToggle()
+nnoremap <silent><C-e> :NetrwToggleCmd<CR>
